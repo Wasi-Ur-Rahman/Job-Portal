@@ -9,6 +9,7 @@ class NotificationsController < ApplicationController
 
     if params[:mark_all_read] == "true"
       current_user.notifications.unread.update_all(read_at: Time.current)
+      Notification.broadcast_refresh_for!(current_user)
       redirect_to notifications_path, notice: "All notifications marked as read"
     end
 
@@ -22,7 +23,11 @@ class NotificationsController < ApplicationController
 
   def destroy
     @notification.destroy
-    redirect_to notifications_path, notice: "Notification deleted"
+
+    respond_to do |format|
+      format.html { redirect_to notifications_path, notice: "Notification deleted" }
+      format.turbo_stream { head :ok }
+    end
   end
 
   def mark_as_read
@@ -31,15 +36,18 @@ class NotificationsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_back(fallback_location: notifications_path) }
+      format.turbo_stream { head :ok }
       format.json { render json: { success: true } }
     end
   end
 
   def mark_all_as_read
     current_user.notifications.unread.update_all(read_at: Time.current)
+    Notification.broadcast_refresh_for!(current_user)
 
     respond_to do |format|
       format.html { redirect_to notifications_path, notice: "All notifications marked as read" }
+      format.turbo_stream { head :ok }
       format.json { render json: { success: true } }
     end
   end

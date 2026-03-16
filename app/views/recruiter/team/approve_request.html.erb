@@ -1,4 +1,1 @@
-<div>
-  <h1 class="font-bold text-4xl">Recruiter::Team#approve_request</h1>
-  <p>Find me in app/views/recruiter/team/approve_request.html.erb</p>
-</div>
+<%= render "shared/action_feedback", title: "Recruiter approved", message: "The request was approved and the recruiter now has access to the company workspace.", primary_label: "Manage team", primary_path: recruiter_team_index_path, secondary_label: "Dashboard", secondary_path: recruiter_dashboard_path %>

@@ -2,10 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["input", "tagsContainer"]
-
-  connect() {
-    console.log("✅ Tags controller connected")
-  }
+  static values = { paramName: { type: String, default: "user[skills_list][]" } }
 
   addTag(event) {
     event.preventDefault()
@@ -16,11 +13,11 @@ export default class extends Controller {
     value = value.replace(/</g, "&lt;").replace(/>/g, "&gt;")
 
     const tag = document.createElement("span")
-    tag.className = "bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full flex items-center gap-2"
+    tag.className = "inline-flex items-center gap-2 rounded-full bg-teal-50 px-3 py-1 text-sm font-semibold text-teal-700"
     tag.innerHTML = `
       ${value}
-      <button type="button" data-action="tags#removeTag" class="text-indigo-700 font-bold">×</button>
-      <input type="hidden" name="user[skills_list][]" value="${value}">
+      <button type="button" data-action="tags#removeTag" class="font-bold text-teal-700">×</button>
+      <input type="hidden" name="${this.paramNameValue}" value="${value}">
     `
     this.tagsContainerTarget.appendChild(tag)
     this.inputTarget.value = ""

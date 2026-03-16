@@ -5,100 +5,83 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-gray-50">
-    <!-- Navigation -->
-    <nav class="bg-white border-b border-gray-200">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-          <div class="flex">
-            <div class="flex-shrink-0 flex items-center">
-              <%= link_to recruiter_dashboard_path, class: "text-xl font-bold text-indigo-600" do %>
-                Job Portal
-              <% end %>
-            </div>
-            <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-              <%= link_to "Dashboard", recruiter_dashboard_path, 
-                  class: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{'border-indigo-500 text-gray-900' if current_page?(recruiter_dashboard_path)}" %>
-              
-              <%= link_to "Jobs", recruiter_jobs_path, 
-                  class: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{'border-indigo-500 text-gray-900' if controller_name == 'jobs'}" %>
-              
-              <%= link_to "Applications", recruiter_applications_path, 
-                  class: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{'border-indigo-500 text-gray-900' if controller_name == 'applications'}" %>
+  <body>
+    <% if user_signed_in? %>
+      <%= turbo_stream_from notification_stream_name(current_user) %>
+    <% end %>
 
-              <!-- Show Team Management only for managers -->
+    <nav class="topbar" data-controller="mobile-nav">
+      <div class="topbar-shell">
+        <div class="topbar-row">
+          <div class="flex items-center gap-3">
+            <%= link_to recruiter_dashboard_path, class: "topbar-brand" do %>
+              <span class="topbar-brand-mark">RC</span>
+              <span>Recruiter Hub</span>
+            <% end %>
+
+            <div class="topbar-nav">
+              <%= link_to "Dashboard", recruiter_dashboard_path, class: "topbar-link #{'active' if current_page?(recruiter_dashboard_path)}" %>
+              <%= link_to "Jobs", recruiter_jobs_path, class: "topbar-link #{'active' if controller_name == 'jobs'}" %>
+              <%= link_to "Applications", recruiter_applications_path, class: "topbar-link #{'active' if controller_name == 'applications'}" %>
               <% if current_user.can_manage_company?(current_company) %>
-                <%= link_to "Team", recruiter_team_index_path, 
-                    class: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{'border-indigo-500 text-gray-900' if controller_name == 'team'}" %>
-                <%= link_to "Company", edit_recruiter_company_path(current_company), 
-                  class: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" %>
+                <%= link_to "Team", recruiter_team_index_path, class: "topbar-link #{'active' if controller_name == 'team'}" %>
+                <%= link_to "Company", recruiter_company_path(current_company), class: "topbar-link #{'active' if controller_name == 'companies'}" %>
               <% end %>
             </div>
           </div>
-          
-          <div class="hidden sm:ml-6 sm:flex sm:items-center">
-          <%= render 'shared/notification_badge' %>
-            <!-- Company info -->
-            <div class="ml-3 flex items-center mr-4">
-              <% if current_company&.logo&.attached? %>
-                <%= image_tag current_company.logo, class: "h-8 w-8 rounded-full mr-2" %>
-              <% end %>
-              <span class="text-sm text-gray-700"><%= current_company&.name %></span>
-            </div>
 
-            <!-- Profile dropdown -->
-            <div class="ml-3 relative">
-              <div class="flex items-center text-sm text-gray-700">
-                <span class="mr-4">Hello, <%= current_user.first_name %></span>
-                <%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete },
-                    class: "text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium" %>
+          <div class="topbar-actions">
+            <%= render "shared/notification_badge", user: current_user %>
+            <div class="topbar-meta">
+              <div class="text-right">
+                <p class="text-xs uppercase tracking-[0.18em] text-slate-400"><%= current_company&.name || "Company" %></p>
+                <p class="text-sm font-semibold text-slate-800"><%= current_user.first_name %></p>
               </div>
+              <%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete }, class: "btn-secondary" %>
             </div>
+          </div>
+
+          <button type="button" class="topbar-mobile-toggle" data-mobile-nav-target="button" data-action="mobile-nav#toggle" aria-expanded="false" aria-label="Toggle navigation">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="topbar-mobile-panel hidden" data-mobile-nav-target="panel">
+          <div class="topbar-mobile-stack">
+            <%= link_to "Dashboard", recruiter_dashboard_path, class: "topbar-link #{'active' if current_page?(recruiter_dashboard_path)}", data: { action: "mobile-nav#close" } %>
+            <%= link_to "Jobs", recruiter_jobs_path, class: "topbar-link #{'active' if controller_name == 'jobs'}", data: { action: "mobile-nav#close" } %>
+            <%= link_to "Applications", recruiter_applications_path, class: "topbar-link #{'active' if controller_name == 'applications'}", data: { action: "mobile-nav#close" } %>
+            <% if current_user.can_manage_company?(current_company) %>
+              <%= link_to "Team", recruiter_team_index_path, class: "topbar-link #{'active' if controller_name == 'team'}", data: { action: "mobile-nav#close" } %>
+              <%= link_to "Company", recruiter_company_path(current_company), class: "topbar-link #{'active' if controller_name == 'companies'}", data: { action: "mobile-nav#close" } %>
+            <% end %>
+            <%= link_to "Logout", destroy_user_session_path, data: { turbo_method: :delete, action: "mobile-nav#close" }, class: "btn-primary w-full" %>
           </div>
         </div>
       </div>
     </nav>
 
-    <!-- Flash Messages -->
-    <% if notice %>
-      <div class="bg-green-50 border-l-4 border-green-400 p-4">
-        <div class="flex">
-          <div class="flex-shrink-0">
-            <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-            </svg>
-          </div>
-          <div class="ml-3">
-            <p class="text-sm text-green-700"><%= notice %></p>
-          </div>
+    <main class="app-shell">
+      <% if notice || alert %>
+        <div class="flash-stack">
+          <% if notice %>
+            <div class="flash-banner notice"><div><p class="font-semibold">Success</p><p><%= notice %></p></div></div>
+          <% end %>
+          <% if alert %>
+            <div class="flash-banner alert"><div><p class="font-semibold">Attention</p><p><%= alert %></p></div></div>
+          <% end %>
         </div>
-      </div>
-    <% end %>
+      <% end %>
 
-    <% if alert %>
-      <div class="bg-red-50 border-l-4 border-red-400 p-4">
-        <div class="flex">
-          <div class="flex-shrink-0">
-            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-            </svg>
-          </div>
-          <div class="ml-3">
-            <p class="text-sm text-red-700"><%= alert %></p>
-          </div>
-        </div>
-      </div>
-    <% end %>
-
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <%= yield %>
     </main>
   </body>

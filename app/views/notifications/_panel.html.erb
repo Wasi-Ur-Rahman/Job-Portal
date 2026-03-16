@@ -1,0 +1,27 @@
+<section id="<%= notifications_panel_dom_id(user) %>" class="section-card">
+  <div class="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+    <div>
+      <h2 class="text-2xl font-bold text-slate-900">Activity feed</h2>
+      <p class="mt-2 text-sm text-slate-500"><%= pluralize(unread_count, "unread notification") %> waiting for you.</p>
+    </div>
+
+    <% if unread_count.positive? %>
+      <%= button_to "Mark all as read", mark_all_as_read_notifications_path, method: :post, form: { data: { turbo_stream: true } }, class: "btn-secondary" %>
+    <% end %>
+  </div>
+
+  <% if notifications.any? %>
+    <div class="space-y-4">
+      <%= render notifications %>
+    </div>
+
+    <div class="mt-8">
+      <%= paginate notifications %>
+    </div>
+  <% else %>
+    <div class="ui-empty-state">
+      <h3 class="text-lg font-semibold text-slate-900">You’re caught up</h3>
+      <p class="mt-2">New activity will appear here as it happens.</p>
+    </div>
+  <% end %>
+</section>
