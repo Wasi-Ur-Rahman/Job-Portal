@@ -1,4 +1,1 @@
-<div>
-  <h1 class="font-bold text-4xl">Jobs#submit_application</h1>
-  <p>Find me in app/views/jobs/submit_application.html.erb</p>
-</div>
+<%= render "shared/action_feedback", title: "Application submitted", message: "Your application has been sent successfully. You can track its status from your applications dashboard.", primary_label: "View applications", primary_path: applications_path, secondary_label: "Browse jobs", secondary_path: jobs_path %>

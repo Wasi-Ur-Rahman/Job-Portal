@@ -1,43 +1,54 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<section class="page-hero relative">
+  <span class="page-kicker">Account settings</span>
+  <h1 class="page-title">Update your sign-in details safely.</h1>
+  <p class="page-subtitle">Change your email or password with explicit confirmation of the current password.</p>
+</section>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+<section class="section-card max-w-3xl mx-auto">
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "space-y-6" }) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+    <div>
+      <%= f.label :email, class: "mb-2 block text-sm font-semibold text-slate-700" %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    </div>
 
-  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+    <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+      <div class="section-card-muted text-sm text-slate-600">
+        Waiting for confirmation on <strong><%= resource.unconfirmed_email %></strong>.
+      </div>
+    <% end %>
+
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <%= f.label :password, class: "mb-2 block text-sm font-semibold text-slate-700" %>
+        <%= f.password_field :password, autocomplete: "new-password", placeholder: "Leave blank to keep current" %>
+        <% if @minimum_password_length %>
+          <p class="mt-2 text-sm text-slate-500"><%= @minimum_password_length %> characters minimum</p>
+        <% end %>
+      </div>
+      <div>
+        <%= f.label :password_confirmation, class: "mb-2 block text-sm font-semibold text-slate-700" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+      </div>
+    </div>
+
+    <div>
+      <%= f.label :current_password, class: "mb-2 block text-sm font-semibold text-slate-700" %>
+      <%= f.password_field :current_password, autocomplete: "current-password", placeholder: "Required to confirm changes" %>
+    </div>
+
+    <div class="flex flex-col gap-3 border-t border-slate-200 pt-5 sm:flex-row sm:justify-between">
+      <%= link_to "Back", :back, class: "btn-secondary" %>
+      <%= f.submit "Update account", class: "btn-primary" %>
+    </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-    <% if @minimum_password_length %>
-      <br />
-      <em><%= @minimum_password_length %> characters minimum</em>
-    <% end %>
+  <div class="mt-8 border-t border-slate-200 pt-6">
+    <h2 class="text-xl font-bold text-slate-900">Delete account</h2>
+    <p class="mt-2 text-sm text-slate-500">This removes your access and should only be used if you’re certain.</p>
+    <div class="mt-4">
+      <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete, class: "btn-danger" %>
+    </div>
   </div>
-
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-    <%= f.password_field :current_password, autocomplete: "current-password" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Update" %>
-  </div>
-<% end %>
-
-<h3>Cancel my account</h3>
-
-<div>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></div>
-
-<%= link_to "Back", :back %>
+</section>

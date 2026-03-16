@@ -1,89 +1,72 @@
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="w-full max-w-md space-y-8">
-    <div class="text-center">
-      <h2 class="mt-6 text-4xl font-extrabold text-gray-900">
-        Create Your Account
-      </h2>
-      <p class="mt-2 text-sm text-gray-600">
-        Or
-        <%= link_to "sign in to your account", new_session_path(resource_name), 
-            class: "font-medium text-indigo-600 hover:text-indigo-500" %>
-      </p>
+<section class="auth-shell">
+  <div class="auth-grid">
+    <div class="auth-copy">
+      <span class="page-kicker">Get started</span>
+      <h1 class="mt-5 text-5xl font-bold">Create the account that matches how you work.</h1>
+      <p class="mt-5 max-w-lg text-sm leading-8 text-white/80">Job seekers get a faster application flow. Recruiters get a cleaner hiring workspace. One account structure, two distinct paths.</p>
     </div>
 
-    <div class="bg-white shadow-lg rounded-2xl p-8 space-y-6">
-      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), 
-                   local: true, class: "space-y-6") do |f| %>
+    <div class="auth-card">
+      <h2 class="text-3xl font-bold text-slate-900">Create account</h2>
+      <p class="mt-2 text-sm text-slate-500">
+        Already have one?
+        <%= link_to "Sign in", new_session_path(resource_name), class: "text-teal-700 hover:text-teal-800" %>
+      </p>
+
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), local: true, class: "mt-8 space-y-5") do |f| %>
         <%= render "devise/shared/error_messages", resource: resource %>
 
-        <!-- Name Fields -->
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid gap-4 sm:grid-cols-2">
           <div>
-            <%= f.label :first_name, class: "block text-sm font-medium text-gray-700" %>
-            <%= f.text_field :first_name, required: true, autofocus: true, 
-                class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+            <%= f.label :first_name, class: "mb-2 block text-sm font-semibold text-slate-700" %>
+            <%= f.text_field :first_name, required: true, autofocus: true %>
           </div>
-          
           <div>
-            <%= f.label :last_name, class: "block text-sm font-medium text-gray-700" %>
-            <%= f.text_field :last_name, required: true, 
-                class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+            <%= f.label :last_name, class: "mb-2 block text-sm font-semibold text-slate-700" %>
+            <%= f.text_field :last_name, required: true %>
           </div>
         </div>
 
-        <!-- Email & Username -->
         <div>
-          <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
-          <%= f.email_field :email, required: true, autocomplete: "email", 
-              class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+          <%= f.label :email, class: "mb-2 block text-sm font-semibold text-slate-700" %>
+          <%= f.email_field :email, required: true, autocomplete: "email" %>
         </div>
 
         <div>
-          <%= f.label :username, class: "block text-sm font-medium text-gray-700" %>
-          <%= f.text_field :username, required: true, 
-              class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+          <%= f.label :username, class: "mb-2 block text-sm font-semibold text-slate-700" %>
+          <%= f.text_field :username, required: true %>
         </div>
 
-        <!-- Role Selection -->
         <div>
-          <%= f.label :role, "I am a:", class: "block text-sm font-medium text-gray-700" %>
-          <div class="mt-2 space-y-2">
-            <% [['job_seeker', 'Job Seeker - Looking for opportunities'], 
-                ['recruiter', 'Recruiter - Hiring for my company']].each do |role, description| %>
-              <label class="flex items-center p-2 border border-gray-200 rounded-lg hover:bg-indigo-50 cursor-pointer">
-                <%= f.radio_button :role, role, class: "h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500" %>
-                <span class="ml-3 text-gray-900">
-                  <strong><%= role.humanize %></strong> - <%= description.split(' - ').last %>
+          <%= f.label :role, "I’m joining as", class: "mb-2 block text-sm font-semibold text-slate-700" %>
+          <div class="grid gap-3">
+            <% [["job_seeker", "Job seeker", "Discover roles and manage applications."], ["recruiter", "Recruiter", "Post jobs and review candidates."]].each do |role, title, copy| %>
+              <label class="section-card-muted flex cursor-pointer items-start gap-3">
+                <%= f.radio_button :role, role, class: "mt-1" %>
+                <span>
+                  <span class="block text-base font-bold text-slate-900"><%= title %></span>
+                  <span class="mt-1 block text-sm text-slate-500"><%= copy %></span>
                 </span>
               </label>
             <% end %>
           </div>
         </div>
 
-        <!-- Password Fields -->
         <div>
-          <%= f.label :password, class: "block text-sm font-medium text-gray-700" %>
-          <%= f.password_field :password, required: true, autocomplete: "new-password", 
-              class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+          <%= f.label :password, class: "mb-2 block text-sm font-semibold text-slate-700" %>
+          <%= f.password_field :password, required: true, autocomplete: "new-password" %>
           <% if @minimum_password_length %>
-            <p class="mt-1 text-sm text-gray-500">
-              <%= @minimum_password_length %> characters minimum
-            </p>
+            <p class="mt-2 text-sm text-slate-500"><%= @minimum_password_length %> characters minimum</p>
           <% end %>
         </div>
 
         <div>
-          <%= f.label :password_confirmation, class: "block text-sm font-medium text-gray-700" %>
-          <%= f.password_field :password_confirmation, required: true, autocomplete: "new-password", 
-              class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+          <%= f.label :password_confirmation, class: "mb-2 block text-sm font-semibold text-slate-700" %>
+          <%= f.password_field :password_confirmation, required: true, autocomplete: "new-password" %>
         </div>
 
-        <!-- Submit Button -->
-        <div>
-          <%= f.submit "Create Account", 
-              class: "mt-2 w-full py-3 px-4 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200" %>
-        </div>
+        <%= f.submit "Create account", class: "btn-primary w-full" %>
       <% end %>
     </div>
   </div>
-</div>
+</section>

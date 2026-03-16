@@ -24,11 +24,13 @@ class ApplicationsController < ApplicationController
   def show
     authorize @application
 
-    current_user.notifications
-                .where(kind: "application_update")
-                .where("content LIKE ?", "%#{@application.job.title}")
-                .unread
-                .update_all(read_at: Time.current)
+    notifications = current_user.notifications
+                                .where(kind: "application_update")
+                                .where("content LIKE ?", "%#{@application.job.title}")
+                                .unread
+
+    notifications.update_all(read_at: Time.current)
+    Notification.broadcast_refresh_for!(current_user) if notifications.exists?
   end
 
   def withdraw

@@ -1,4 +1,1 @@
-<div>
-  <h1 class="font-bold text-4xl">RecruiterOnboarding#submit_request</h1>
-  <p>Find me in app/views/recruiter_onboarding/submit_request.html.erb</p>
-</div>
+<%= render "shared/action_feedback", title: "Recruiter request submitted", message: "Your request to join the company was sent successfully.", primary_label: "View pending status", primary_path: recruiter_pending_path, secondary_label: "Browse jobs", secondary_path: jobs_path %>

@@ -1,24 +1,35 @@
-# README
+# Job Portal
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Rails 7.1 job platform with public job search, recruiter workspace, and admin operations.
 
-Things you may want to cover:
+## Frontend stack
 
-* Ruby version
+- `turbo-rails` for page navigation and form handling
+- `stimulus-rails` for client-side interactions
+- `tailwindcss-rails` for styling via the Rails build pipeline
+- `importmap-rails` for JavaScript module loading
 
-* System dependencies
+## Frontend workflow
 
-* Configuration
+Use the development procfile so Rails and the Tailwind watcher run together:
 
-* Database creation
+```bash
+bin/dev
+```
 
-* Database initialization
+That starts:
 
-* How to run the test suite
+- `bin/rails server`
+- `bin/rails tailwindcss:watch`
 
-* Services (job queues, cache servers, search engines, etc.)
+If you only need a one-off CSS build:
 
-* Deployment instructions
+```bash
+bin/rails tailwindcss:build
+```
 
-* ...
+## Notes
+
+- Layouts now load the Rails-built `tailwind.css` instead of the Tailwind CDN.
+- Stimulus controllers live in `app/javascript/controllers`.
+- Shared design styles live in `app/assets/stylesheets/application.css`.

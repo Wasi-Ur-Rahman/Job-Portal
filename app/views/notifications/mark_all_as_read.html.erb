@@ -1,4 +1,1 @@
-<div>
-  <h1 class="font-bold text-4xl">Notifications#mark_all_as_read</h1>
-  <p>Find me in app/views/notifications/mark_all_as_read.html.erb</p>
-</div>
+<%= render "shared/action_feedback", title: "Inbox cleared", message: "All notifications have been marked as read.", primary_label: "Open notifications", primary_path: notifications_path, secondary_label: "Back home", secondary_path: root_path %>
