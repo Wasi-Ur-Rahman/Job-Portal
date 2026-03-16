@@ -1,4 +1,4 @@
-class CreateUserSkills < ActiveRecord::Migration[8.0]
+class CreateUserSkills < ActiveRecord::Migration[7.1]
   def change
     create_table :user_skills do |t|
       t.references :user, null: false, foreign_key: true

@@ -1,4 +1,4 @@
-class ChangeRecruiterMembershipRoleToEnum < ActiveRecord::Migration[8.0]
+class ChangeRecruiterMembershipRoleToEnum < ActiveRecord::Migration[7.1]
   def up
     add_column :recruiter_memberships, :role_temp, :integer
 

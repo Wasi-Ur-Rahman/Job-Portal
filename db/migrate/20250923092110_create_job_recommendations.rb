@@ -1,4 +1,4 @@
-class CreateJobRecommendations < ActiveRecord::Migration[8.0]
+class CreateJobRecommendations < ActiveRecord::Migration[7.1]
   def change
     create_table :job_recommendations do |t|
       t.references :user, null: false, foreign_key: true

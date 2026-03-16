@@ -1,4 +1,4 @@
-class ChangeUserRoleToEnum < ActiveRecord::Migration[8.0]
+class ChangeUserRoleToEnum < ActiveRecord::Migration[7.1]
   def up
     add_column :users, :role_temp, :integer
 

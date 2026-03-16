@@ -1,4 +1,4 @@
-class ChangeCompanyStatusToEnum < ActiveRecord::Migration[8.0]
+class ChangeCompanyStatusToEnum < ActiveRecord::Migration[7.1]
   def up
     add_column :companies, :status_temp, :integer, default: 0, null: false
 

@@ -1,4 +1,4 @@
-class ChangeNotificationKindToEnum < ActiveRecord::Migration[8.0]
+class ChangeNotificationKindToEnum < ActiveRecord::Migration[7.1]
   def up
     add_column :notifications, :kind_temp, :integer
 

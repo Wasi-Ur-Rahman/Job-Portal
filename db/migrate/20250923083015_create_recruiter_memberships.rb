@@ -1,4 +1,4 @@
-class CreateRecruiterMemberships < ActiveRecord::Migration[8.0]
+class CreateRecruiterMemberships < ActiveRecord::Migration[7.1]
   def change
     create_table :recruiter_memberships do |t|
       t.references :user, null: false, foreign_key: true

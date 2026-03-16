@@ -1,4 +1,4 @@
-class ChangeJobStatusToEnum < ActiveRecord::Migration[8.0]
+class ChangeJobStatusToEnum < ActiveRecord::Migration[7.1]
   def up
     add_column :jobs, :status_temp, :integer
 
